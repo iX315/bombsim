@@ -1,54 +1,93 @@
 float timerRed;
 float timerBlue;
-float setupTime = 5.0;
-bool started = false;
+float setupTime = 15.0;
 bool buttonsAttachedDomination = false;
+bool buttonsAttachedConfigDomination = false;
+bool showConfigDomination = false;
 
 void setupDomination() {
   if (!buttonsAttachedDomination) {
-    blackBtn.attachClick(theVoid);
+    greenBtn.setPressTicks(300);
+    redBtn.setPressTicks(300);
+    blackBtn.attachClick(configDomination);
     greenBtn.attachDuringLongPress(greenTimer);
     redBtn.attachDuringLongPress(redTimer);
     timerRed = setupTime;
     timerBlue = setupTime;
     buttonsAttachedDomination = true;
   }
-  if (started) {
-    if (timerRed > timerBlue) {
-      digitalWrite(RED_LED, LOW);
-      digitalWrite(GREEN_LED, HIGH);
-    }
-    if (timerRed < timerBlue) {
-      digitalWrite(RED_LED, HIGH);
-      digitalWrite(GREEN_LED, LOW);
-    }
-    if (timerRed <= 0) {
-      // red wins
-      gameOver("RED");
-    }
-    if (timerBlue <= 0) {
-      // green wins
-      gameOver("GREEN");
-    }
-    delay(100);
+  if (showConfigDomination) {
+    configDomination();
+  } else if (gameStarted) {
+    dominationGame();
   } else {
+    // main screen
     writeLcd("(G)(R) start", "(B) config");
     delay(100);
   }
 }
 
-void greenTimer() {
-  started = true;
-  timerBlue = timerBlue - 0.1;
-  writeLcd("   ** GREEN **");
-  updateProgressBar(round(timerBlue * 10), round(setupTime * 10), 1);
+void configDomination() {
+  showConfigDomination = true;
+  if (!buttonsAttachedConfigDomination) {
+    blackBtn.attachClick(exitConfigDomination);
+    greenBtn.attachDuringLongPress(theVoid);
+    redBtn.attachDuringLongPress(theVoid);
+    greenBtn.attachClick(decreaseSeconds);
+    redBtn.attachClick(increaseSeconds);
+    buttonsAttachedConfigDomination = true;
+  }
+  writeLcd(" -(G) [" + String(round(setupTime)) + "s] (R)+", "(B) back");
   delay(100);
 }
 
+void exitConfigDomination() {
+  showConfigDomination = false;
+  buttonsAttachedDomination = false;
+  blackBtn.attachClick(theVoid);
+  greenBtn.attachClick(theVoid);
+  redBtn.attachClick(theVoid);
+}
+
+void decreaseSeconds() {
+  if (setupTime > 1) {
+    setupTime = setupTime - 1;
+  }
+}
+
+void increaseSeconds() {
+  setupTime = setupTime + 1;
+}
+
+void dominationGame() {
+  if (timerRed > timerBlue) {
+    digitalWrite(RED_LED, LOW);
+    digitalWrite(GREEN_LED, HIGH);
+  }
+  if (timerRed < timerBlue) {
+    digitalWrite(RED_LED, HIGH);
+    digitalWrite(GREEN_LED, LOW);
+  }
+  if (timerRed <= 0) {
+    // red wins
+    gameOver("RED");
+  }
+  if (timerBlue <= 0) {
+    // green wins
+    gameOver("GREEN");
+  }
+}
+
+void greenTimer() {
+  gameStarted = true;
+  timerBlue = timerBlue - 0.1;
+  writeLcd("   ** GREEN **");
+  updateProgressBar(round(timerBlue * 10), round(setupTime * 10), 1);
+}
+
 void redTimer() {
-  started = true;
+  gameStarted = true;
   timerRed = timerRed - 0.1;
   writeLcd("    ** RED **");
   updateProgressBar(round(timerRed * 10), round(setupTime * 10), 1);
-  delay(100);
 }

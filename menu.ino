@@ -1,4 +1,4 @@
-bool gameStarted = false;
+bool showMainMenu = true;
 int gameMode = 0;
 String gameModes[2] = {
   "Domination",
@@ -12,10 +12,10 @@ void setupMenu() {
     greenBtn.attachClick(changeGameMode);
     buttonsAttached = true;
   }
-  if (gameStarted) {
-    startGame();
-  } else {
+  if (showMainMenu) {
     mainMenu();
+  } else {
+    startGame();
   }
 }
 
@@ -25,7 +25,12 @@ void mainMenu() {
 }
 
 void startGame() {
-  gameStarted = true;
+  // hack - call this 1 time
+  if (showMainMenu) {
+    blackBtn.attachClick(theVoid);
+    greenBtn.attachClick(theVoid);
+  }
+  showMainMenu = false;
   if (gameMode == 0) {
     setupDomination();
   }

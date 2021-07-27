@@ -84,6 +84,8 @@ byte five[] = {
   B11111
 };
 
+bool gameStarted = false;
+
 void setup() {
   lcd.begin();
   lcd.backlight();
