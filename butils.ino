@@ -15,7 +15,7 @@ void printLine(String line) {
   line = line.substring(0, LCD_WIDTH);
   int rest = LCD_WIDTH - line.length();
   String fill = "";
-  for (size_t i = 0; i < rest; i++) {
+  for (int i = 0; i < rest; i++) {
     fill += " ";
   }
   lcd.print(line + fill);
@@ -57,7 +57,7 @@ void setupLeds() {
 }
 
 void blinkAll() {
-  for (size_t i = 0; i < 20; i++) {
+  for (int i = 0; i < 20; i++) {
     digitalWrite(RED_LED, HIGH);
     delay(50);
     digitalWrite(GREEN_LED, HIGH);

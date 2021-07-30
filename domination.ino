@@ -1,6 +1,6 @@
 float timerRed;
 float timerBlue;
-float setupTime = 15.0;
+float setupTimeDomination = 15.0;
 bool buttonsAttachedDomination = false;
 bool buttonsAttachedConfigDomination = false;
 bool showConfigDomination = false;
@@ -12,8 +12,8 @@ void setupDomination() {
     blackBtn.attachClick(configDomination);
     greenBtn.attachDuringLongPress(greenTimer);
     redBtn.attachDuringLongPress(redTimer);
-    timerRed = setupTime;
-    timerBlue = setupTime;
+    timerRed = setupTimeDomination;
+    timerBlue = setupTimeDomination;
     buttonsAttachedDomination = true;
   }
   if (showConfigDomination) {
@@ -37,7 +37,7 @@ void configDomination() {
     redBtn.attachClick(increaseSeconds);
     buttonsAttachedConfigDomination = true;
   }
-  writeLcd(" -(G) [" + String(round(setupTime)) + "s] (R)+", "(B) back");
+  writeLcd(" -(G) [" + String(round(setupTimeDomination)) + "s] (R)+", "(B) back");
   delay(100);
 }
 
@@ -50,13 +50,13 @@ void exitConfigDomination() {
 }
 
 void decreaseSeconds() {
-  if (setupTime > 1) {
-    setupTime = setupTime - 1;
+  if (setupTimeDomination > 1) {
+    setupTimeDomination = setupTimeDomination - 1;
   }
 }
 
 void increaseSeconds() {
-  setupTime = setupTime + 1;
+  setupTimeDomination = setupTimeDomination + 1;
 }
 
 void dominationGame() {
@@ -82,12 +82,12 @@ void greenTimer() {
   gameStarted = true;
   timerBlue = timerBlue - 0.1;
   writeLcd("   ** GREEN **");
-  updateProgressBar(round(timerBlue * 10), round(setupTime * 10), 1);
+  updateProgressBar(round(timerBlue * 10), round(setupTimeDomination * 10), 1);
 }
 
 void redTimer() {
   gameStarted = true;
   timerRed = timerRed - 0.1;
   writeLcd("    ** RED **");
-  updateProgressBar(round(timerRed * 10), round(setupTime * 10), 1);
+  updateProgressBar(round(timerRed * 10), round(setupTimeDomination * 10), 1);
 }
